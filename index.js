@@ -37,11 +37,11 @@ const datForkArchive = async(url, title)  => {
     console.log('Forking archive')
     const archive = await DatArchive.fork(url)
     // saveDatSite(archive.url, title, url);
-    let message = `Forked dat at ${archive.url}`;
+    let message = `Created new forked dat at ${archive.url}`;
     console.log(message)
     elem.innerHTML = elem.innerHTML + message + "<br/>";
     const dir = await archive.readdir('/')
-    message = 'Read dir /: ' + JSON.stringify(dir);
+    message = 'Read new dat\'s dir /: ' + JSON.stringify(dir);
     console.log(message)
     elem.innerHTML = elem.innerHTML + message + "<br/>";
     // const readContents = await archive.readFile('/index.html')
