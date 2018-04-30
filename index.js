@@ -36,9 +36,7 @@ const datCreateWiki = async () => {
 const datForkArchive = async(url, title)  => {
     let elem = document.querySelector('#response');
     console.log('Forking archive')
-    const DefaultManager = DatArchive.DefaultManager
-    // const storage =
-    // DatArchive.setManager(new DefaultManager(storage))
+
     const archive = await DatArchive.fork(url)
     let writable = archive._archive.writable
     // saveDatSite(archive.url, title, url);
@@ -55,8 +53,27 @@ const datForkArchive = async(url, title)  => {
     // this.openAddress(archive.url)
 }
 
+
+
 // Lifted directly from dat-archive-web example
 const datCreateArchive = async () => {
+    // Setup storage to indexdb
+    const DefaultManager = DatArchive.DefaultManager
+    class PersistantManager extends DefaultManager {
+        constructor () {
+            // super('http://gateway.mauve.moe:3000')
+            // super()
+            super('http://127.0.0.1:3000')
+        }
+
+        getStorage (key) {
+            return randomAccessIdb(`dat://${key}/`)
+        }
+    }
+
+    const mgr = new PersistantManager()
+    DatArchive.setManager(mgr)
+
     const contents = `
             <title>Gateway Test</title>
             <p>Hello World!</p>
@@ -70,18 +87,46 @@ const datCreateArchive = async () => {
     console.log(`Opened, ${archive.url}`)
     await archive.writeFile('index.html', contents)
     console.log('Wrote index.html')
+    //
+    // const dir = await archive.readdir('/')
+    // console.log('Read dir:', dir)
+    // const readContents = await archive.readFile('/index.html')
+    // console.log('Read contents', readContents)
+    let url1 = archive.url;
+    // let url1 = 'dat://ffadeac19f11e374add6092b25e474b584ec8f03b2f20accbf628173dd3249ae';
+    console.log("url1:" + url1)
 
-    const dir = await archive.readdir('/')
-    console.log('Read dir:', dir)
-    const readContents = await archive.readFile('/index.html')
-    console.log('Read contents', readContents)
-    const sameArchive = new DatArchive(archive.url)
+
+    // const sameArchive = new DatArchive(archive.url)
+
+    const sameArchive =  new DatArchive(url1)
     await sameArchive.writeFile('index2.html', contents)
+    console.log('Wrote index2.html')
     console.log('Wrote index2.html')
     const dir2 = await sameArchive.readdir('/')
     console.log('Read dir2:', dir2)
 
-    return archive.url
+    // var cool = randomAccessIdb('cool.txt')()
+    // cool.write(100, new buffer.Buffer('GREETINGS'), function (err) {
+    //     if (err) return console.error(err)
+    //     cool.read(104, 3, function (err, buf) {
+    //         if (err) return console.error(err)
+    //         console.log(buf.toString()) // TIN
+    //     })
+    // })
+
+    return url1
+
+
+
+// Only patch global if it doesn't exist
+// Makes this a polyfill!
+    if (!window.DatArchive) {
+        DatArchive.setManager(new PersistantManager())
+        window.DatArchive = DatArchive
+    }
 }
+
+
 
 
