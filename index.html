@@ -3,28 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>test</title>
-    <script src="/assets/dat-archive-web.js"></script>
+    <!--<script src="/assets/dat-archive-web.js"></script>-->
     <script src="/assets/jquery.js"></script>
     <script src="/assets/base32.js"></script>
     <script src="/assets/buffer.js"></script>
     <script src="/assets/random-access-idb@latest.js"></script>
+    <script src="/assets/rpc-bundle.js"></script>
+    <!--<script src="/assets/dat-polyfill-client.js"></script>-->
 
     <script src="index.js"></script>
 </head>
 <body>
-    
-    <div style="float:left; width: 45%;">
-        <h2>Message Box</h2>
-        <textarea id="messageBox"></textarea> <br>
-        <button id="saveMessageButton">save</button>
-        <div id="messageBoxStatus"></div>
-    </div>
-
-    <div style="float: right; width: 45%;">
-        <h2> Fork </h2>
-        <button id="forkButton">Click to fork this archive</button>
-        <div id="linkToFork"></div>
-    </div>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body, html {
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: 100%;
+    }
+    .search-container {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+    }
+    .search-box {
+        padding: 0.5em;
+        flex: 1;
+    }
+    .client-container {
+        flex: 1;
+        position: relative;
+    }
+    .client-frame {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border: 0;
+    }
+    .hidden {
+        display: none
+    }
+    .selection-form {
+        position: fixed;
+        top: 1em;
+        bottom: 1em;
+        left: 1em;
+        right: 1em;
+        background: #FAFAFA;
+        border-radius: 1em;
+    }
+</style>
+<form class="search-container" target="client-frame" onsubmit="return false;">
+    <!--<input type="hidden" name="DAT_GATEWAY" value="http://gateway.mauve.moe:3000" />-->
+    <input placeholder="dat://" class="search-box" id="search" />
+    <button class="search-button" id="go">Go</button>
+</form>
+<div class="client-container">
+    <iframe id="client-frame" src="../client/index.html?DAT_GATEWAY=http%3A//gateway.mauve.moe%3A3000" class="client-frame" seamless="seamless"></iframe>
+</div>
+<form id="selection-form" class="selection-form hidden">
+    <div id="selection-items" class="selection-items"></div>
+    <button>OK</button>
+    <button id="cancel-button">Cancel</button>
+</form>
 
 </body>
 </html>
