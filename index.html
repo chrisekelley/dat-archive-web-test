@@ -5,13 +5,26 @@
     <title>test</title>
     <script src="/assets/dat-archive-web.js"></script>
     <script src="/assets/jquery.js"></script>
+    <script src="/assets/base32.js"></script>
     <script src="/assets/buffer.js"></script>
     <script src="/assets/random-access-idb@latest.js"></script>
 
     <script src="index.js"></script>
 </head>
 <body>
-test 123. check console.
-<div id="response"></div>
+    
+    <div style="float:left; width: 45%;">
+        <h2>Message Box</h2>
+        <textarea id="messageBox"></textarea> <br>
+        <button id="saveMessageButton">save</button>
+        <div id="messageBoxStatus"></div>
+    </div>
+
+    <div style="float: right; width: 45%;">
+        <h2> Fork </h2>
+        <button id="forkButton">Click to fork this archive</button>
+        <div id="linkToFork"></div>
+    </div>
+
 </body>
 </html>
